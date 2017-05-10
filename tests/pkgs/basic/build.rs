@@ -38,8 +38,6 @@ fn main() {
     let _ = out_dir();
     let _ = profile();
     let _ = target::endian();
-    let _ = target::features();
-    let _ = target::has_atomic();
     let _ = target::pointer_width();
     {
         let triple = target::triple();

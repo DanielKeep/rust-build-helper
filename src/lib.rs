@@ -591,23 +591,6 @@ pub mod target {
         parse_env_var!("CARGO_CFG_TARGET_ENDIAN", "endianness")
     }
 
-    /// Platform processor features.
-    pub fn features() -> Vec<String> {
-        env_var!("CARGO_CFG_TARGET_FEATURE")
-            .split(',')
-            .map(Into::into)
-            .collect()
-    }
-
-    /// List of types which are atomic on this platform.
-    pub fn has_atomic() -> Vec<Atomic> {
-        env_var!("CARGO_CFG_TARGET_HAS_ATOMIC")
-            .split(',')
-            .map(|s| s.parse()
-                .expect(&format!("CARGO_CFG_TARGET_HAS_ATOMIC contained invalid atomic type {:?}", s)))
-            .collect()
-    }
-
     /// Width, in bits, of a pointer on this platform.
     pub fn pointer_width() -> u8 {
         parse_env_var!("CARGO_CFG_TARGET_POINTER_WIDTH", "integer")
