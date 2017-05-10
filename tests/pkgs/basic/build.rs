@@ -25,7 +25,7 @@ fn main() {
     assert!(!cargo::features::enabled("b"));
     assert!(cargo::features::enabled("default"));
     let _ = cargo::manifest::dir();
-    assert_eq!(cargo::manifest::links(), None);
+    assert_eq!(cargo::manifest::links(), Some("awakening".into()));
     assert_eq!(cargo::pkg::authors().sorted(), vec!["Daniel Keep <daniel.keep@gmail.com>", "John Smith <null@null>"]);
     assert_eq!(cargo::pkg::description().unwrap_or("".into()), "A description of this crate.");
     assert_eq!(cargo::pkg::homepage().unwrap_or("".into()), "http://example.org/basic.rs");
