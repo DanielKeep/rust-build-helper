@@ -32,7 +32,7 @@ This should only be used on variables which are *guaranteed* to be defined by Ca
 */
 macro_rules! env_var {
     ($name:expr) => {
-        env::var($name)
+        ::std::env::var($name)
             .expect(concat!($name, " environment variable is not set"))
     };
 }
@@ -44,7 +44,7 @@ This should only be used on variables which are *guaranteed* to be defined by Ca
 */
 macro_rules! env_var_os {
     ($name:expr) => {
-        env::var_os($name)
+        ::std::env::var_os($name)
             .expect(concat!($name, " environment variable is not set"))
     };
 }
@@ -55,6 +55,16 @@ Reads, unwraps, and parses an environment variable.
 This should only be used on variables which are *guaranteed* to be defined by Cargo.
 */
 macro_rules! parse_env_var {
+    (try: $name:expr, $ty_desc:expr) => {
+        {
+            ::std::env::var($name)
+                .ok()
+                .map(|v| v.parse()
+                    .expect(&format!(concat!($name, " {:?} is not a valid ", $ty_desc), v))
+                )
+        }
+    };
+
     ($name:expr, $ty_desc:expr) => {
         {
             let v = env_var!($name);
@@ -368,11 +378,14 @@ impl FromStr for Triple {
 Functions for locating toolchain binaries.
 */
 pub mod bin {
-    use super::*;
+    use std::env;
+    use std::path::PathBuf;
 
     /// Path to Cargo binary.
     pub fn cargo() -> PathBuf {
-        env_var_os!("CARGO").into()
+        env::var_os("CARGO")
+            .unwrap_or_else(|| "cargo".into())
+            .into()
     }
 
     /// Path to `rustc` as selected by Cargo.
@@ -390,14 +403,12 @@ pub mod bin {
 Information related to the Cargo package environment.
 */
 pub mod cargo {
-    use super::*;
-
     /**
     Package features.
     */
     pub mod features {
         use std::ascii::AsciiExt;
-        use super::*;
+        use std::env;
 
         /**
         Iterator over enabled features.
@@ -463,7 +474,8 @@ pub mod cargo {
     Information related to the package manifest.
     */
     pub mod manifest {
-        use super::*;
+        use std::env;
+        use std::path::PathBuf;
 
         /// Path to the directory in which the manifest is stored.
         pub fn dir() -> PathBuf {
@@ -481,7 +493,6 @@ pub mod cargo {
     */
     pub mod pkg {
         use semver::Version;
-        use super::*;
 
         /// A list of authors.
         pub fn authors() -> Vec<String> {
@@ -527,7 +538,7 @@ pub mod cargo {
 Inter-dependency metadata.
 */
 pub mod metadata {
-    use super::*;
+    use std::env;
 
     /// Emit a metadata field for dependents of this package.
     pub fn emit_raw(key: &str, value: &str) {
@@ -545,7 +556,8 @@ pub mod metadata {
 Functions for communicating with `rustc`.
 */
 pub mod rustc {
-    use super::*;
+    use std::path::Path;
+    use ::{LibKind, SearchKind};
 
     /// Link a library into the output.
     pub fn link_lib<P: AsRef<Path>>(link_kind: Option<LibKind>, name: P) {
@@ -556,7 +568,7 @@ pub mod rustc {
     }
 
     /// Add a search directory.
-    pub fn link_search<P: AsRef<Path>>(link_kind: Option<LibKind>, path: P) {
+    pub fn link_search<P: AsRef<Path>>(link_kind: Option<SearchKind>, path: P) {
         println!("cargo:rustc-link-search={}{}",
             link_kind.map(|v| format!("{}=", v))
                 .unwrap_or_else(|| "".into()),
@@ -586,14 +598,22 @@ Target platform information.
 pub mod target {
     use super::*;
 
-    /// Platform endianness.
-    pub fn endian() -> Endianness {
-        parse_env_var!("CARGO_CFG_TARGET_ENDIAN", "endianness")
+    /**
+    Platform endianness.
+
+    **Requires**: Rust 1.14.
+    */
+    pub fn endian() -> Option<Endianness> {
+        parse_env_var!(try: "CARGO_CFG_TARGET_ENDIAN", "endianness")
     }
 
-    /// Width, in bits, of a pointer on this platform.
-    pub fn pointer_width() -> u8 {
-        parse_env_var!("CARGO_CFG_TARGET_POINTER_WIDTH", "integer")
+    /**
+    Width, in bits, of a pointer on this platform.
+
+    **Requires**: Rust 1.14.
+    */
+    pub fn pointer_width() -> Option<u8> {
+        parse_env_var!(try: "CARGO_CFG_TARGET_POINTER_WIDTH", "integer")
     }
 
     /// Platform triple.

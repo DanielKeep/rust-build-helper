@@ -5,7 +5,8 @@ macro_rules! cargo {
 
             let cmd_str;
             let out = {
-                let mut cmd = Command::new(::std::env::var("CARGO").unwrap());
+                let mut cmd = Command::new(::std::env::var("CARGO")
+                    .unwrap_or_else(|_| "cargo".into()));
                 $(
                     cmd.arg($args);
                 )*

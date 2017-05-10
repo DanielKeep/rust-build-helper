@@ -1,7 +1,7 @@
 extern crate build_helper;
 
 use build_helper::*;
-use semver::Version;
+use build_helper::semver::Version;
 
 macro_rules! show {
     ($value:expr) => {
