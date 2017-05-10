@@ -1,7 +1,29 @@
+/*
+Copyright ⓒ 2017 contributors.
+Licensed under the MIT license (see LICENSE or <http://opensource.org
+/licenses/MIT>) or the Apache License, Version 2.0 (see LICENSE of
+<http://www.apache.org/licenses/LICENSE-2.0>), at your option. All
+files in the project carrying such notice may not be copied, modified,
+or distributed except according to those terms.
+*/
 /*!
 This crate contains convenience methods for build scripts.
 
 It provides easy access to the information Cargo provides to build scripts, as well as functions for emitting information back to Cargo.
+
+## Compatibility
+
+`build-helper` is currently supported on `rustc` version 1.13 and higher.
+
+## Features
+
+The following [optional features](http://doc.crates.io/manifest.html#the-features-section) are available:
+
+* `nightly`: requires a nightly compiler, and introduces functionality that is *not* subject to normal stability guarantees.
+
+  * `target::features` - target processor features.
+  * `target::has_atomic` - target platform atomic types.
+
 */
 #![allow(dead_code, unused_variables)]
 pub extern crate semver;
