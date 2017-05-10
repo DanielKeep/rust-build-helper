@@ -608,6 +608,36 @@ pub mod target {
     }
 
     /**
+    Platform processor features.
+
+    **Requires**: Rust nightly.
+    */
+    #[cfg(feature = "nightly")]
+    pub fn features() -> Option<Vec<String>> {
+        env::var("CARGO_CFG_TARGET_FEATURE")
+            .ok()
+            .map(|v| v.split(',').map(Into::into).collect())
+    }
+
+    /**
+    List of types which are atomic on this platform.
+
+    **Requires**: Rust nightly.
+    */
+    #[cfg(feature = "nightly")]
+    pub fn has_atomic() -> Option<Vec<Atomic>> {
+        env::var("CARGO_CFG_TARGET_HAS_ATOMIC")
+            .ok()
+            .map(|v| {
+                v.split(',')
+                    .map(|s| s.parse()
+                        .expect(&format!("CARGO_CFG_TARGET_HAS_ATOMIC \
+                            contained invalid atomic type {:?}", s)))
+                    .collect()
+            })
+    }
+
+    /**
     Width, in bits, of a pointer on this platform.
 
     **Requires**: Rust 1.14.

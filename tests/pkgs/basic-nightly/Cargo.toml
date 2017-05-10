@@ -1,0 +1,12 @@
+[package]
+name = "basic-nightly"
+version = "1.2.3-pre"
+authors = ["Daniel Keep <daniel.keep@gmail.com>"]
+
+build = "build.rs"
+
+[lib]
+path = "lib.rs"
+
+[build-dependencies]
+build-helper = { path = "../../..", features = ["nightly"] }

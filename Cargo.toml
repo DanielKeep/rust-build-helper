@@ -3,9 +3,14 @@ name = "build-helper"
 version = "0.1.0"
 authors = ["Daniel Keep <daniel.keep@gmail.com>"]
 
+[features]
+default = []
+nightly = []
+
 [workspace]
 members = [
     "tests/pkgs/basic",
+    "tests/pkgs/basic-nightly",
 ]
 
 [dependencies]
