@@ -1,0 +1,19 @@
+[package]
+name = "basic"
+version = "1.2.3-pre"
+authors = ["Daniel Keep <daniel.keep@gmail.com>", "John Smith <null@null>"]
+description = "A description of this crate."
+homepage = "http://example.org/basic.rs"
+
+build = "build.rs"
+
+[features]
+default = ["a"]
+a = []
+b = []
+
+[lib]
+path = "lib.rs"
+
+[build-dependencies]
+build-helper = { path = "../../.." }

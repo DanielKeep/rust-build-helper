@@ -1,0 +1,12 @@
+[package]
+name = "build-helper"
+version = "0.1.0"
+authors = ["Daniel Keep <daniel.keep@gmail.com>"]
+
+[workspace]
+members = [
+    "tests/pkgs/basic",
+]
+
+[dependencies]
+semver = "0.6.0"
