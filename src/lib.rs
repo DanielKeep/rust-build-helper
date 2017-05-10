@@ -23,7 +23,6 @@ The following [optional features](http://doc.crates.io/manifest.html#the-feature
 
   * `target::features` - target processor features.
   * `target::has_atomic` - target platform atomic types.
-
 */
 #![allow(dead_code, unused_variables)]
 pub extern crate semver;
