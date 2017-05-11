@@ -11,6 +11,7 @@ nightly = []
 members = [
     "tests/pkgs/basic",
     "tests/pkgs/basic-nightly",
+    "tests/pkgs/cargo-env",
 ]
 
 [dependencies]

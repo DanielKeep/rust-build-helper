@@ -19,6 +19,7 @@ macro_rules! test_pkg {
 #[test]
 fn test_pkgs() {
     test_pkg!("basic");
+    test_pkg!("cargo-env");
 
     if cfg!(feature = "nightly") {
         test_pkg!("basic-nightly");

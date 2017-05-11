@@ -1,0 +1,12 @@
+[package]
+name = "cargo-env"
+version = "0.1.0"
+authors = ["Daniel Keep <daniel.keep@gmail.com>"]
+
+build = "build.rs"
+
+[lib]
+path = "../empty.rs"
+
+[build-dependencies]
+build-helper = { path = "../../.." }
