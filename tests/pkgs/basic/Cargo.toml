@@ -14,7 +14,7 @@ a = []
 b = []
 
 [lib]
-path = "lib.rs"
+path = "../empty.rs"
 
 [build-dependencies]
 build-helper = { path = "../../.." }
