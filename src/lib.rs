@@ -631,6 +631,8 @@ pub mod target {
     /**
     Platform processor features.
 
+    A list of features can be obtained using `rustc --print target-features`.
+
     **Requires**: Rust nightly.
     */
     #[cfg(feature = "nightly")]
@@ -667,7 +669,11 @@ pub mod target {
         parse_env_var!(try: "CARGO_CFG_TARGET_POINTER_WIDTH", "integer")
     }
 
-    /// Platform triple.
+    /**
+    Platform triple.
+
+    A list of target triples can be obtained using `rustc --print target-list`.
+    */
     pub fn triple() -> Triple {
         parse_env_var!("TARGET", "triple")
     }
