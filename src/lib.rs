@@ -722,6 +722,11 @@ pub fn warning<S: AsRef<str>>(msg: S) {
     println!("cargo:warning={}", msg.as_ref());
 }
 
+/// Is this build targeting a UNIX platform?
+pub fn unix() -> bool {
+    env::var("CARGO_CFG_UNIX").is_ok()
+}
+
 /// Is this build targetting Microsoft Windows?
 pub fn windows() -> bool {
     env::var("CARGO_CFG_WINDOWS").is_ok()
