@@ -13,7 +13,7 @@ It provides easy access to the information Cargo provides to build scripts, as w
 
 ## Compatibility
 
-`build-helper` is currently supported on `rustc` version 1.13 and higher.
+* `0.1`: Rust 1.13.
 
 ## Features
 
