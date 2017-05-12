@@ -6,15 +6,15 @@ rust:
   - beta
   - nightly
 script: >
-  cargo build $CARGO_FLAGS --features "$CARGO_FEATURES"
-  && cargo test $CARGO_FLAGS --features "$CARGO_FEATURES"
+  cargo build $TEST_CARGO_FLAGS --features "$TEST_CARGO_FEATURES"
+  && cargo test $TEST_CARGO_FLAGS --features "$TEST_CARGO_FEATURES"
 env:
   - >
-    CARGO_FLAGS="--verbose --no-default-features"
-    CARGO_FEATURES=
+    TEST_CARGO_FLAGS="--verbose --no-default-features"
+    TEST_CARGO_FEATURES=
 matrix:
   allow_failures:
     - rust: nightly
   include:
     - rust: nightly
-      env: CARGO_FEATURES=nightly
+      env: TEST_CARGO_FEATURES=nightly

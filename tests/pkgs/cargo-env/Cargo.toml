@@ -1,6 +1,6 @@
 [package]
-name = "basic-nightly"
-version = "1.2.3-pre"
+name = "cargo-env"
+version = "0.1.0"
 authors = ["Daniel Keep <daniel.keep@gmail.com>"]
 
 build = "build.rs"
@@ -9,4 +9,4 @@ build = "build.rs"
 path = "../empty.rs"
 
 [build-dependencies]
-build-helper = { path = "../../..", features = ["nightly"] }
+build-helper = { path = "../../.." }

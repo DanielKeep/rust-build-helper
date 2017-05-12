@@ -8,17 +8,20 @@ or distributed except according to those terms.
 */
 #[macro_use] mod util;
 
-#[test]
-fn test_pkgs() {
-    cargo!("build", "--manifest-path", "tests/pkgs/basic/Cargo.toml")
-        .expect("pkgs/basic")
-        .succeeded("pkgs/basic");
+macro_rules! test_pkg {
+    ($name:expr) => {
+        cargo!("build", "--manifest-path", concat!("tests/pkgs/", $name, "/Cargo.toml"))
+            .expect(concat!("failed to build command to build tests/pkgs/", $name))
+            .succeeded(concat!("failed to build tests/pkgs/", $name))
+    };
 }
 
 #[test]
-#[cfg(feature = "nightly")]
-fn test_pkgs_nightly() {
-    cargo!("build", "--manifest-path", "tests/pkgs/basic-nightly/Cargo.toml")
-        .expect("pkgs/basic-nightly")
-        .succeeded("pkgs/basic-nightly")
+fn test_pkgs() {
+    test_pkg!("basic");
+    test_pkg!("cargo-env");
+
+    if cfg!(feature = "nightly") {
+        test_pkg!("basic-nightly");
+    }
 }

@@ -13,7 +13,7 @@ It provides easy access to the information Cargo provides to build scripts, as w
 
 ## Compatibility
 
-`build-helper` is currently supported on `rustc` version 1.13 and higher.
+* `0.1`: Rust 1.13.
 
 ## Features
 
@@ -631,6 +631,8 @@ pub mod target {
     /**
     Platform processor features.
 
+    A list of features can be obtained using `rustc --print target-features`.
+
     **Requires**: Rust nightly.
     */
     #[cfg(feature = "nightly")]
@@ -667,7 +669,11 @@ pub mod target {
         parse_env_var!(try: "CARGO_CFG_TARGET_POINTER_WIDTH", "integer")
     }
 
-    /// Platform triple.
+    /**
+    Platform triple.
+
+    A list of target triples can be obtained using `rustc --print target-list`.
+    */
     pub fn triple() -> Triple {
         parse_env_var!("TARGET", "triple")
     }
@@ -720,6 +726,11 @@ Instructs Cargo to display a warning.
 */
 pub fn warning<S: AsRef<str>>(msg: S) {
     println!("cargo:warning={}", msg.as_ref());
+}
+
+/// Is this build targeting a UNIX platform?
+pub fn unix() -> bool {
+    env::var("CARGO_CFG_UNIX").is_ok()
 }
 
 /// Is this build targetting Microsoft Windows?

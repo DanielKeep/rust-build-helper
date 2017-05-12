@@ -56,6 +56,7 @@ fn main() {
         }
         assert_eq!(triple.as_str(), s);
     }
+    let _ = unix();
     let _ = windows();
 
     // Emit whatever we can which *should* be inert.
