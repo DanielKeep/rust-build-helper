@@ -51,6 +51,7 @@ const KNOWN_VARS: &'static [&'static str] = &[
 
     // Not relevant
     "CARGO_HOME",
+    "CARGO_TARGET_DIR",
 
     // Unknown
     "CARGO_CFG_DEBUG_ASSERTIONS", // Appears to always be present and empty.
