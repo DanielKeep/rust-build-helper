@@ -7,7 +7,6 @@ files in the project carrying such notice may not be copied, modified,
 or distributed except according to those terms.
 */
 
-#[macro_use]
 mod util;
 
 macro_rules! test_pkg {
