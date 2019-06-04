@@ -37,7 +37,6 @@ const KNOWN_VARS: &'static [&'static str] = &[
     "RUSTC",
     "RUSTDOC",
     "TARGET",
-
     // Redundant
     "CARGO_PKG_VERSION_MINOR",
     "CARGO_PKG_VERSION_PRE",
@@ -48,11 +47,12 @@ const KNOWN_VARS: &'static [&'static str] = &[
     "CARGO_CFG_TARGET_VENDOR",
     "CARGO_CFG_TARGET_ENV",
     "CARGO_CFG_TARGET_FAMILY",
-
     // Not relevant
+    "CARGO_CFG_PROC_MACRO",
     "CARGO_HOME",
+    "CARGO_MAKEFLAGS",
+    "CARGO_PKG_REPOSITORY",
     "CARGO_TARGET_DIR",
-
     // Unknown
     "CARGO_CFG_DEBUG_ASSERTIONS", // Appears to always be present and empty.
     "CARGO_CFG_TARGET_THREAD_LOCAL", // Unknown meaning
