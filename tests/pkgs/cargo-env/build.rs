@@ -6,11 +6,9 @@ Licensed under the MIT license (see LICENSE or <http://opensource.org
 files in the project carrying such notice may not be copied, modified,
 or distributed except according to those terms.
 */
-extern crate build_helper;
 
 use std::collections::HashSet;
 use std::env;
-use build_helper::*;
 
 const KNOWN_VARS: &'static [&'static str] = &[
     // Supported
