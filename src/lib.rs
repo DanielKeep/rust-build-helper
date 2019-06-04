@@ -147,7 +147,7 @@ impl FromStr for Atomic {
         if s == "ptr" {
             Ok(Atomic::Pointer)
         } else if let Ok(bits) = s.parse() {
-            Ok(Atomic::Integer { bits: bits })
+            Ok(Atomic::Integer { bits })
         } else {
             Err(InvalidInput(s.into()))
         }
@@ -317,25 +317,24 @@ impl Triple {
                 off..(off + s.len())
             });
 
-            arch = parts.next().expect(&format!(
-                "could not find architecture in triple {:?}",
-                triple
-            ));
+            arch = parts
+                .next()
+                .unwrap_or_else(|| panic!("could not find architecture in triple {:?}", triple));
             family = parts
                 .next()
-                .expect(&format!("could not find family in triple {:?}", triple));
+                .unwrap_or_else(|| panic!("could not find family in triple {:?}", triple));
             os = parts
                 .next()
-                .expect(&format!("could not find os in triple {:?}", triple));
+                .unwrap_or_else(|| panic!("could not find os in triple {:?}", triple));
             env = parts.next();
         }
 
         Triple {
-            triple: triple,
-            arch: arch,
-            env: env,
-            family: family,
-            os: os,
+            triple,
+            arch,
+            env,
+            family,
+            os,
         }
     }
 
