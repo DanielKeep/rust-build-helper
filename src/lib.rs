@@ -430,7 +430,6 @@ pub mod cargo {
     Package features.
     */
     pub mod features {
-        use std::ascii::AsciiExt;
         use std::env;
 
         /**
@@ -577,9 +576,9 @@ pub mod metadata {
 Functions for communicating with `rustc`.
 */
 pub mod rustc {
-    use std::path::Path;
-    use ::{LibKind, SearchKind};
 
+    use crate::{LibKind, SearchKind};
+    use std::path::Path;
     /// Link a library into the output.
     pub fn link_lib<P: AsRef<Path>>(link_kind: Option<LibKind>, name: P) {
         println!(
