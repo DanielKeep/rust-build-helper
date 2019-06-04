@@ -8,11 +8,21 @@ or distributed except according to those terms.
 */
 #[macro_use] mod util;
 
+#[macro_use]
+mod util;
+
 macro_rules! test_pkg {
     ($name:expr) => {
-        cargo!("build", "--manifest-path", concat!("tests/pkgs/", $name, "/Cargo.toml"))
-            .expect(concat!("failed to build command to build tests/pkgs/", $name))
-            .succeeded(concat!("failed to build tests/pkgs/", $name))
+        cargo!(
+            "build",
+            "--manifest-path",
+            concat!("tests/pkgs/", $name, "/Cargo.toml")
+        )
+        .expect(concat!(
+            "failed to build command to build tests/pkgs/",
+            $name
+        ))
+        .succeeded(concat!("failed to build tests/pkgs/", $name))
     };
 }
 

@@ -58,13 +58,9 @@ const KNOWN_VARS: &'static [&'static str] = &[
     "CARGO_CFG_TARGET_THREAD_LOCAL", // Unknown meaning
 ];
 
-const PREFIX_CHECK: &'static [&'static str] = &[
-    "CARGO_",
-];
+const PREFIX_CHECK: &'static [&'static str] = &["CARGO_"];
 
-const PREFIX_IGNORE: &'static [&'static str] = &[
-    "CARGO_FEATURE_",
-];
+const PREFIX_IGNORE: &'static [&'static str] = &["CARGO_FEATURE_"];
 
 fn main() {
     let known: HashSet<_> = KNOWN_VARS.iter().cloned().collect();

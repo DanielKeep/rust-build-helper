@@ -8,19 +8,17 @@ or distributed except according to those terms.
 */
 extern crate build_helper;
 
-use build_helper::*;
 use build_helper::semver::Version;
+use build_helper::*;
 
 macro_rules! show {
     ($value:expr) => {
         println!(concat!("DEBUG: ", stringify!($value), ": {:?}"), $value);
     };
-    ($value:expr, |$i:ident| $map:expr) => {
-        {
-            let $i = $value;
-            println!(concat!("DEBUG: ", stringify!($value), ": {:?}"), $map);
-        }
-    };
+    ($value:expr, |$i:ident| $map:expr) => {{
+        let $i = $value;
+        println!(concat!("DEBUG: ", stringify!($value), ": {:?}"), $map);
+    }};
 }
 
 fn main() {
@@ -28,15 +26,30 @@ fn main() {
     let _ = bin::cargo();
     let _ = bin::rustc();
     let _ = bin::rustdoc();
-    assert_eq!(cargo::features::all().collect::<Vec<_>>().sorted(), vec!["a", "default"]);
+    assert_eq!(
+        cargo::features::all().collect::<Vec<_>>().sorted(),
+        vec!["a", "default"]
+    );
     assert!(cargo::features::enabled("a"));
     assert!(!cargo::features::enabled("b"));
     assert!(cargo::features::enabled("default"));
     let _ = cargo::manifest::dir();
     assert_eq!(cargo::manifest::links(), Some("awakening".into()));
-    assert_eq!(cargo::pkg::authors().sorted(), vec!["Daniel Keep <daniel.keep@gmail.com>", "John Smith <null@null>"]);
-    assert_eq!(cargo::pkg::description().unwrap_or("".into()), "A description of this crate.");
-    assert_eq!(cargo::pkg::homepage().unwrap_or("".into()), "http://example.org/basic.rs");
+    assert_eq!(
+        cargo::pkg::authors().sorted(),
+        vec![
+            "Daniel Keep <daniel.keep@gmail.com>",
+            "John Smith <null@null>"
+        ]
+    );
+    assert_eq!(
+        cargo::pkg::description().unwrap_or("".into()),
+        "A description of this crate."
+    );
+    assert_eq!(
+        cargo::pkg::homepage().unwrap_or("".into()),
+        "http://example.org/basic.rs"
+    );
     assert_eq!(cargo::pkg::name(), "basic");
     assert_eq!(cargo::pkg::version(), Version::parse("1.2.3-pre").unwrap());
     let _ = debug();

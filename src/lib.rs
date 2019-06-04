@@ -53,8 +53,7 @@ This should only be used on variables which are *guaranteed* to be defined by Ca
 */
 macro_rules! env_var {
     ($name:expr) => {
-        ::std::env::var($name)
-            .expect(concat!($name, " environment variable is not set"))
+        ::std::env::var($name).expect(concat!($name, " environment variable is not set"))
     };
 }
 
@@ -65,8 +64,7 @@ This should only be used on variables which are *guaranteed* to be defined by Ca
 */
 macro_rules! env_var_os {
     ($name:expr) => {
-        ::std::env::var_os($name)
-            .expect(concat!($name, " environment variable is not set"))
+        ::std::env::var_os($name).expect(concat!($name, " environment variable is not set"))
     };
 }
 
@@ -76,23 +74,22 @@ Reads, unwraps, and parses an environment variable.
 This should only be used on variables which are *guaranteed* to be defined by Cargo.
 */
 macro_rules! parse_env_var {
-    (try: $name:expr, $ty_desc:expr) => {
-        {
-            ::std::env::var($name)
-                .ok()
-                .map(|v| v.parse()
-                    .expect(&format!(concat!($name, " {:?} is not a valid ", $ty_desc), v))
-                )
-        }
-    };
+    (try: $name:expr, $ty_desc:expr) => {{
+        ::std::env::var($name).ok().map(|v| {
+            v.parse().expect(&format!(
+                concat!($name, " {:?} is not a valid ", $ty_desc),
+                v
+            ))
+        })
+    }};
 
-    ($name:expr, $ty_desc:expr) => {
-        {
-            let v = env_var!($name);
-            v.parse()
-                .expect(&format!(concat!($name, " {:?} is not a valid ", $ty_desc), v))
-        }
-    };
+    ($name:expr, $ty_desc:expr) => {{
+        let v = env_var!($name);
+        v.parse().expect(&format!(
+            concat!($name, " {:?} is not a valid ", $ty_desc),
+            v
+        ))
+    }};
 }
 
 /**
@@ -182,7 +179,7 @@ impl FromStr for Endianness {
         match s {
             "big" => Ok(Endianness::Big),
             "little" => Ok(Endianness::Little),
-            _ => Err(InvalidInput(s.into()))
+            _ => Err(InvalidInput(s.into())),
         }
     }
 }
@@ -220,7 +217,7 @@ impl FromStr for LibKind {
             "static" => Ok(LibKind::Static),
             "dylib" => Ok(LibKind::DyLib),
             "framework" => Ok(LibKind::Framework),
-            _ => Err(InvalidInput(s.into()))
+            _ => Err(InvalidInput(s.into())),
         }
     }
 }
@@ -250,7 +247,7 @@ impl FromStr for Profile {
         match s {
             "debug" => Ok(Profile::Debug),
             "release" => Ok(Profile::Release),
-            _ => Err(InvalidInput(s.into()))
+            _ => Err(InvalidInput(s.into())),
         }
     }
 }
@@ -289,7 +286,7 @@ impl FromStr for SearchKind {
             "native" => Ok(SearchKind::Native),
             "framework" => Ok(SearchKind::Framework),
             "all" => Ok(SearchKind::All),
-            _ => Err(InvalidInput(s.into()))
+            _ => Err(InvalidInput(s.into())),
         }
     }
 }
@@ -315,15 +312,21 @@ impl Triple {
         let os;
 
         {
-            let mut parts = triple.splitn(4, '-')
-                .map(|s| {
-                    let off = subslice_offset(&triple, s);
-                    off..(off + s.len())
-                });
+            let mut parts = triple.splitn(4, '-').map(|s| {
+                let off = subslice_offset(&triple, s);
+                off..(off + s.len())
+            });
 
-            arch = parts.next().expect(&format!("could not find architecture in triple {:?}", triple));
-            family = parts.next().expect(&format!("could not find family in triple {:?}", triple));
-            os = parts.next().expect(&format!("could not find os in triple {:?}", triple));
+            arch = parts.next().expect(&format!(
+                "could not find architecture in triple {:?}",
+                triple
+            ));
+            family = parts
+                .next()
+                .expect(&format!("could not find family in triple {:?}", triple));
+            os = parts
+                .next()
+                .expect(&format!("could not find os in triple {:?}", triple));
             env = parts.next();
         }
 
@@ -356,8 +359,7 @@ impl Triple {
     Values include `"gnu"`, `"msvc"`, `"musl"`, `"android"` *etc.*  Value is `None` if the platform doesn't specify an environment.
     */
     pub fn env(&self) -> Option<&str> {
-        self.env.as_ref()
-            .map(|s| &self.triple[s.clone()])
+        self.env.as_ref().map(|s| &self.triple[s.clone()])
     }
 
     /**
@@ -459,9 +461,7 @@ pub mod cargo {
         Due to the name mangling used by Cargo, features are returned as all lower case, with hypens instead of underscores.
         */
         pub fn all() -> Iter {
-            Iter {
-                iter: env::vars(),
-            }
+            Iter { iter: env::vars() }
         }
 
         /// Determine if a specific feature is enabled.
@@ -475,7 +475,7 @@ pub mod cargo {
                 .map(|c| match c {
                     'A'...'Z' => c.to_ascii_lowercase(),
                     '_' => '-',
-                    c => c
+                    c => c,
                 })
                 .collect()
         }
@@ -485,7 +485,7 @@ pub mod cargo {
                 .map(|c| match c {
                     'a'...'z' => c.to_ascii_uppercase(),
                     '-' => '_',
-                    c => c
+                    c => c,
                 })
                 .collect()
         }
@@ -582,18 +582,24 @@ pub mod rustc {
 
     /// Link a library into the output.
     pub fn link_lib<P: AsRef<Path>>(link_kind: Option<LibKind>, name: P) {
-        println!("cargo:rustc-link-lib={}{}",
-            link_kind.map(|v| format!("{}=", v))
+        println!(
+            "cargo:rustc-link-lib={}{}",
+            link_kind
+                .map(|v| format!("{}=", v))
                 .unwrap_or_else(|| "".into()),
-            name.as_ref().display());
+            name.as_ref().display()
+        );
     }
 
     /// Add a search directory.
     pub fn link_search<P: AsRef<Path>>(link_kind: Option<SearchKind>, path: P) {
-        println!("cargo:rustc-link-search={}{}",
-            link_kind.map(|v| format!("{}=", v))
+        println!(
+            "cargo:rustc-link-search={}{}",
+            link_kind
+                .map(|v| format!("{}=", v))
                 .unwrap_or_else(|| "".into()),
-            path.as_ref().display());
+            path.as_ref().display()
+        );
     }
 
     /**
@@ -649,15 +655,17 @@ pub mod target {
     */
     #[cfg(feature = "nightly")]
     pub fn has_atomic() -> Option<Vec<Atomic>> {
-        env::var("CARGO_CFG_TARGET_HAS_ATOMIC")
-            .ok()
-            .map(|v| {
-                v.split(',')
-                    .map(|s| s.parse()
-                        .expect(&format!("CARGO_CFG_TARGET_HAS_ATOMIC \
-                            contained invalid atomic type {:?}", s)))
-                    .collect()
-            })
+        env::var("CARGO_CFG_TARGET_HAS_ATOMIC").ok().map(|v| {
+            v.split(',')
+                .map(|s| {
+                    s.parse().expect(&format!(
+                        "CARGO_CFG_TARGET_HAS_ATOMIC \
+                         contained invalid atomic type {:?}",
+                        s
+                    ))
+                })
+                .collect()
+        })
     }
 
     /**

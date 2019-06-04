@@ -6,6 +6,8 @@ Licensed under the MIT license (see LICENSE or <http://opensource.org
 files in the project carrying such notice may not be copied, modified,
 or distributed except according to those terms.
 */
+
+#[macro_export]
 macro_rules! cargo {
     ($($args:expr),* $(,)*) => {
         {
@@ -22,7 +24,7 @@ macro_rules! cargo {
                 cmd_str = format!("{:?}", cmd);
 
                 cmd.output()
-                    .map(::util::Output::from)
+                    .map(crate::util::Output::from)
             };
 
             println!("cargo cmd: {}", cmd_str);
